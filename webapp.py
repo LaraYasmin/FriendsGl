@@ -3,7 +3,6 @@ from flaskext.mysql import MySQL
 import os, base64
 import re
 from werkzeug.utils import secure_filename
-from flask_cors import CORS
 import boto3
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeSerializer
@@ -20,15 +19,6 @@ s3_client = boto3.client(
 
 app = Flask(__name__, template_folder='templates')
 db = MySQL()
-CORS(app)
-
-app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'yourId@gmail.com'
-app.config['MAIL_PASSWORD'] = '*****'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-mail = Mail(app)
 
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = '1903Lara*'
