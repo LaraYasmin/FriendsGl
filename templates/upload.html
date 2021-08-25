@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+      <title> Create Album </title>
+
+      <link type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
+      <link type="text/css" href="{{ url_for('static', filename='thumbnail-gallery.css') }}" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="{{ url_for('view_profile', id=userid) }}">{{ username }}</a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <li class="nav-item" style="line-height: 36px">
+                <a class="nav-link" href="{{ url_for('all_users') }}"> Members </a>
+            </li>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <div class="dropdown bg-dark" style="float:right; margin-right:1em;">
+                    <button class="dropbtn nav-link bg-dark" style="padding: 10px 30px"> Menu </button>
+                    <div class="dropdown-content bg-dark" style="right:0;">
+                        <a href="{{ url_for('upload', id=userid) }}"> New Album </a>
+                        <a href="{{ url_for('view_all_albums', uploader_id=userid) }}"> My albums  </a>
+                        <a href="{{ url_for('view_friends', id=userid) }}"> My friends </a>
+                        <a href="{{ url_for('search', id=userid) }}">  Search </a>
+                        <a href="{{ url_for('logout') }}">  Exit </a>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid center" style="margin-top:20px">
+        <div class="card" style="width: 100%; text-align:center">
+            <div class="card-block" style="background-color:#156A93; text-align:center; color:white">
+                <h4 class="card-title"> Create Album </h4>
+            </div>
+            <ul class="list-group list-group-flush">
+                <form class="loginform" action="{{ url_for('create_album') }}" method=POST>
+                    <li class="list-group-item">
+                        <input type=text name=album maxlength=30 required placeholder="Album Name">
+                    </li>
+                     <li class="list-group-item">
+                         <input type=submit value="CREATE">
+                     </li>
+                </form>
+            </ul>
+        </div>
+    </div>
+  </body>
+</html>

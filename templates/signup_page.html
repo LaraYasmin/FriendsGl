@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+      <title> Sign Up </title>
+
+      <link type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
+      <link type="text/css" href="{{ url_for('static', filename='thumbnail-gallery.css') }}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <img width="150px" height="105px"src="static/css/friends.png" style="position:relative"}>
+        <a class="navbar-brand" href="#"></a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login_page') }}">Login
+
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('signup_page') }}">Signup
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('search')}}"  >Search</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <br>
+    <br>
+
+    <div class="my-4 text-center text-lg-center">
+        <p><b> {{ message }} </b></p>
+        <form class='form' action="{{ url_for('signup') }}" position="auto" method=POST>
+            Email:<br>
+            <input type=email name=email value="{{request.form.email}}" required maxlength=25 placeholder=""><br>
+            Password:<br>
+            <input type=password name=password1 value="{{request.form.password1}}" minlength=6 maxlength=25 required placeholder=""><br>
+            Re-enter Passord:<br>
+            <input type=password name=password2 value="{{request.form.password2}}" minlength=6 maxlength=25 required placeholder=""><br>
+            First name:<br>
+            <input type=text name=first_name value="{{request.form.first_name}}" minlength=2 maxlength=25 required placeholder=""><br>
+            Last name:<br>
+            <input type=text name=last_name value="{{request.form.last_name}}" minlength=2 maxlength=25 required placeholder=""><br>
+            <br>
+            <input type="submit" value="SIGN UP">
+        </form>
+    </div>
+  </body>
+</html>

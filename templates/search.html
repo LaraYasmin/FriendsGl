@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+      <title> Search </title>
+
+      <link type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
+      <link type="text/css" href="{{ url_for('static', filename='thumbnail-gallery.css') }}" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+{% if loggedin %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="{{ url_for('view_profile', id=userid) }}">{{ username }}</a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" style="line-height: 36px">
+                    <a class="nav-link" href="{{ url_for('all_users') }}"> Members </a>
+                </li>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <div class="dropdown bg-dark" style="float:right; margin-right:1em;">
+                        <button class="dropbtn nav-link bg-dark" style="padding: 10px 30px"> Menu </button>
+                        <div class="dropdown-content bg-dark" style="right:0;">
+                            <a href="{{ url_for('upload', id=userid) }}"> New Album </a>
+                            <a href="{{ url_for('view_all_albums', uploader_id=userid) }}"> My albums  </a>
+                            <a href="{{ url_for('view_friends', id=userid) }}"> My friends </a>
+                            <a href="{{ url_for('search', id=userid) }}">  Search </a>
+                            <a href="{{ url_for('logout') }}">  Exit </a>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+{% else %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <img width="150px" height="105px"src="static/css/friends.png" style="position:relative">
+        <a class="navbar-brand" href="#"></a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login_page') }}">Login </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('signup_page') }}"> Signup </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('search')}}"  >Search
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+{% endif %}
+
+<br>
+<br>
+
+<div class="container-fluid">
+    <div class="card" style="text-align:center; width:100%">
+        <div class="card-block" style="text-align:center">
+            <form class='search_form' action="{{ url_for('search') }}" id="searchform" method=POST >
+                <input type=text name=search_word value="{{request.form.search_word}}" required size="50" maxlength=25 placeholder="search gallery">
+                <select name="search_type" form = "searchform">
+                        <option value="photo"  selected = "selected">Photo</option>
+                        <option value="user">User</option>
+                        <option value="comment">Comment</option>
+                </select>
+                <input type="submit" value="GO">
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+{%  if (search_type == 'users') or (search_type == 'comments') %}
+
+    <div class="my-4 text-center text-lg-center">
+        <b>SEARCH RESULTS:</b>
+        <ul style="list-style: none">
+            {% for result in search_results %}
+                {% if result[1] != 'anon' and result[1] !='anon anon' %}
+                    <li> <a href="{{ url_for('view_profile', id=result[0]) }}"> {{ result[1] }} </a> </li>
+                {% else %}
+                    <li> {{ result[1] }} </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <footer class="py-4 bg-dark fixed-bottom">
+        <p class="m-0 text-center text-white"></p>
+    </footer>
+
+
+{%  elif search_type == 'photos' %}
+
+    <div class="row text-center text-lg-left">
+        {% for result in search_results %}
+            <div class="col-lg-3 col-md-4 col-xs-6">
+                <a href="{{ url_for('view_photo', photo_id=result[0]) }}" class="d-block mb-4 h-100">
+                    <img class="img-fluid img-thumbnail" src='data:image/jpg;base64, {{ result[1] }}' alt="">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+{% endif %}
+
+
+  </body>
+</html>
