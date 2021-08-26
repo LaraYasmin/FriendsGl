@@ -32,7 +32,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 conn = db.connect()
 cursor = conn.cursor()
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET', 'DELETE'])
 def home():
     query = 'SELECT photo_id, data, CAPTION FROM PHOTOS ORDER BY photo_id DESC LIMIT 100'
     cursor.execute(query)
@@ -55,15 +55,15 @@ def show_image(bucket):
         pass
     return public_urls
 
-@app.route('/login_page', methods=['POST', 'GET'])
+@app.route('/login_page', methods=['POST', 'GET', 'DELETE'])
 def login_page(message='Please Log In'):
     return render_template('login_page.html', message=message)
 
-@app.route('/signup_page', methods=['POST', 'GET'])
+@app.route('/signup_page', methods=['POST', 'GET', 'DELETE'])
 def signup_page(message="Complete the form to sign up"):
     return render_template('signup_page.html', message=message)
 
-@app.route('/signup', methods=['POST','GET'])
+@app.route('/signup', methods=['POST', 'GET', 'DELETE'])
 def signup():
 
     result = request.form
@@ -109,7 +109,7 @@ def signup():
     session['loggedin'] = True
     return view_profile(id=userid)
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST', 'GET', 'DELETE'])
 def login():
 
     result = request.form
@@ -133,13 +133,13 @@ def login():
 
     return signup_page("No Account with this email and password, would you like to create an account?")
 
-@app.route('/logout', methods=['GET', 'POST'])
+@app.route('/logout', methods=['POST', 'GET', 'DELETE'])
 def logout():
     session.clear()
     session['loggedin'] = False
     return home()
 
-@app.route('/view_profile/<id>', methods=['POST', 'GET'])
+@app.route('/view_profile/<id>', methods=['POST', 'GET', 'DELETE'])
 def view_profile(id):
 
     query = 'SELECT user_id, first_name FROM USERS'
@@ -199,14 +199,14 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['POST', 'GET', 'DELETE'])
 def upload():
     userid = session.get('userid', None)
     my_name = session.get('my_name', None)
     return render_template('upload.html', username=my_name, userid=userid)
 
 
-@app.route('/create_album', methods=['GET', 'POST'])
+@app.route('/create_album', methods=['POST', 'GET', 'DELETE'])
 def create_album():
 
     userid = session.get('userid', None)
@@ -223,7 +223,7 @@ def create_album():
 
 
 
-@app.route('/upload_photo/<album_id>', methods=['GET', 'POST'])
+@app.route('/upload_photo/<album_id>', methods=['POST', 'GET', 'DELETE'])
 def upload_photo(album_id):
 
     userid = session.get('userid', None)
@@ -280,7 +280,7 @@ def upload_photo(album_id):
 
     return render_template('upload_photo.html', album_id=album_id, username=my_name, userid=userid)
 
-@app.route('/view_all_albums/<uploader_id>', methods=['GET', 'POST'])
+@app.route('/view_all_albums/<uploader_id>', methods=['POST', 'GET', 'DELETE'])
 def view_all_albums(uploader_id):
 
     query = 'SELECT album_id, album_name, user_id FROM ALBUMS ORDER BY album_id DESC'
@@ -308,7 +308,7 @@ def view_all_albums(uploader_id):
                            all_albums=all_albums, loggedin=False, uploader_id=uploader_id)
 
 
-@app.route('/view_album_content/<album_id>', methods=['GET', 'POST'])
+@app.route('/view_album_content/<album_id>', methods=['POST', 'GET', 'DELETE'])
 def view_album_content(album_id):
 
     query = 'SELECT album_id, album_name, user_id FROM ALBUMS'
@@ -346,7 +346,7 @@ def view_album_content(album_id):
         return render_template('view_album_content.html', uploader_name=uploader_name, loggedin=False,
                                uploader_id=uploader_id, photos=all_photos, album_id=album_id, album_name=album_name)
 
-@app.route('/view_photo/<photo_id>', methods=['GET', 'POST'])
+@app.route('/view_photo/<photo_id>', methods=['POST', 'GET', 'DELETE'])
 def view_photo(photo_id):
 
     query = 'SELECT photo_id, DATA, CAPTION, album_id FROM PHOTOS'
@@ -440,7 +440,7 @@ def view_photo(photo_id):
                                uploader_id=uploader_id, photo=photo, album_id=album_id, album_name=album_name,
                                comments=all_comments)
 
-@app.route('/comment/<photo_id>', methods=['GET', 'POST'])
+@app.route('/comment/<photo_id>', methods=['POST', 'GET', 'DELETE'])
 def comment(photo_id):
 
     comm = request.form['comment']
@@ -518,7 +518,7 @@ def comment(photo_id):
 
     return view_photo(photo_id=photo_id)
 
-@app.route('/friend_add/<friend_id>', methods=['GET', 'POST'])
+@app.route('/friend_add/<friend_id>', methods=['POST', 'GET', 'DELETE'])
 def friend_add(friend_id):
 
     userid = session.get('userid', None)
@@ -529,7 +529,7 @@ def friend_add(friend_id):
 
     return view_profile(friend_id)
 
-@app.route('/view_friends/<id>', methods=['GET', 'POST'])
+@app.route('/view_friends/<id>', methods=['POST', 'GET', 'DELETE'])
 def view_friends(id):
 
     query = 'SELECT user_id, first_name FROM USERS'
@@ -569,7 +569,7 @@ def view_friends(id):
                            loggedin=False)
 
 
-@app.route('/like/<photo_id>', methods=['GET', 'POST'])
+@app.route('/like/<photo_id>', methods=['POST', 'GET', 'DELETE'])
 def like(photo_id):
 
     userid = session.get('userid', None)
@@ -580,7 +580,7 @@ def like(photo_id):
     return view_photo(photo_id)
 
 
-@app.route('/view_my_tags/<id>', methods=['GET', 'POST'])   #can use to see any person's tags later
+@app.route('/view_my_tags/<id>', methods=['POST', 'GET', 'DELETE'])   #can use to see any person's tags later
 def view_my_tags(id):
 
     query = 'SELECT user_id, first_name FROM USERS'
@@ -604,7 +604,7 @@ def view_my_tags(id):
             user_photos.append(item[0])
 
 
-@app.route('/view_tag_content/<tag>', methods=['GET', 'POST'])
+@app.route('/view_tag_content/<tag>', methods=['POST', 'GET', 'DELETE'])
 def view_tag_content(tag):
 
     if tag[0] != '#':
@@ -649,7 +649,7 @@ def view_tag_content(tag):
                            userid=userid, username=my_name)
 
 
-@app.route('/view_tag/<tag>', methods=['GET', 'POST'])
+@app.route('/view_tag/<tag>', methods=['POST', 'GET', 'DELETE'])
 def view_tag(tag):
 
     if tag[0] != '#':
@@ -679,7 +679,7 @@ def view_tag(tag):
     return render_template('view_tag.html', tag=tag, photos=all_photos, loggedin=False)
 
 
-@app.route('/delete_photo/<photo_id>', methods=['GET', 'POST'])
+@app.route('/delete_photo/<photo_id>', methods=['POST', 'GET', 'DELETE'])
 def delete_photo(photo_id):
 
     userid = session.get('userid', None)
@@ -690,7 +690,7 @@ def delete_photo(photo_id):
 
     return view_profile(id=userid)
 
-@app.route('/delete_comment/<comment_id>', methods=['GET', 'POST'])
+@app.route('/delete_comment/<comment_id>', methods=['POST', 'GET', 'DELETE'])
 def delete_comment(comment_id):
 
     userid = session.get('userid', None)
@@ -716,7 +716,7 @@ def delete_comment(comment_id):
 
     return view_photo(photo_id=photo_id)
 
-@app.route('/delete_album/<album_id>', methods=['GET', 'POST'])
+@app.route('/delete_album/<album_id>', methods=['POST', 'GET', 'DELETE'])
 def delete_album(album_id):
 
     userid = session.get('userid', None)
@@ -728,7 +728,7 @@ def delete_album(album_id):
     return view_profile(id=userid)
 
 
-@app.route('/unlike/<photo_id>', methods=['GET', 'POST'])
+@app.route('/unlike/<photo_id>', methods=['POST', 'GET', 'DELETE'])
 def unlike(photo_id):
 
     userid = session.get('userid', None)
@@ -740,7 +740,7 @@ def unlike(photo_id):
     return view_photo(photo_id=photo_id)
 
 
-@app.route('/unfriend/<friend_id>', methods=['GET', 'POST'])
+@app.route('/unfriend/<friend_id>', methods=['POST', 'GET', 'DELETE'])
 def unfriend(friend_id):
 
     userid = session.get('userid', None)
@@ -751,7 +751,7 @@ def unfriend(friend_id):
 
     return view_profile(id=friend_id)
 
-@app.route('/all_users', methods=['GET', 'POST'])
+@app.route('/all_users', methods=['POST', 'GET', 'DELETE'])
 def all_users():
     query = 'SELECT user_id, first_name, last_name FROM USERS'
     cursor.execute(query)
@@ -770,7 +770,7 @@ def all_users():
     return render_template('all_users.html', all_users=all_users)
 
 
-@app.route('/top_users', methods=['GET', 'POST'])
+@app.route('/top_users', methods=['POST', 'GET', 'DELETE'])
 def top_users():
 
     query0 ='SELECT user_id, COUNT(*) AS Pscore ' \
@@ -841,7 +841,7 @@ def top_users():
     return render_template('top_users.html', top10=top10, loggedin=False)
 
 
-@app.route('/top_tags', methods=['GET', 'POST'])
+@app.route('/top_tags', methods=['POST', 'GET', 'DELETE'])
 def top_tags():
 
     query = 'SELECT COUNT(*) AS score, HASHTAG FROM ASSOCIATE GROUP BY HASHTAG ORDER BY score DESC LIMIT 10'
@@ -909,7 +909,7 @@ def photo_search(key_words):
     return results
 
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search', methods=['POST', 'GET', 'DELETE'])
 def search():
 
     results = []
