@@ -7,7 +7,6 @@ import boto3
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeSerializer
 
-
 S3_BUCKET_NAME='galleryf'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
